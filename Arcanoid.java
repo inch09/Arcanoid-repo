@@ -11,6 +11,8 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
     private int score = 0;
     private int countLife = 1;
     private boolean gameOver;
+    private int zapomnitskorostX = 0;
+    private int zapomnitskorostY = 0;
 
 
     private int boardWidth;
@@ -143,16 +145,18 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
             ball.setVelX(ball.getVelX() / Math.abs(ball.getVelX()) * (Math.abs(ball.getVelX()) - 1));
 
         }
-/*        if(e.getKeyCode()==KeyEvent.VK_SPACE){
-            if(ball.getVelX()!=0) {
-                ball.setVelX(0);
-                ball.setVelY(0);
-            }
-            else{
-                ball.setVelX(zapomnitskorostX);
-                ball.setVelY(0);
-            }
-        }*/
+       if(e.getKeyCode()==KeyEvent.VK_SPACE){
+           if(ball.getVelY()!=0){
+               zapomnitskorostX = ball.getVelX();
+               zapomnitskorostY = ball.getVelY();
+               ball.setVelX(0);
+               ball.setVelY(0);
+           }
+           else{
+               ball.setVelX(zapomnitskorostX);
+               ball.setVelY(zapomnitskorostY);
+           }
+        }
 
 
     }
