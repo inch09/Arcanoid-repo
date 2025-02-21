@@ -11,8 +11,6 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
     private int score = 0;
     private int countLife = 1;
     private boolean gameOver;
-    private int zapomnitskorostX = 0;
-    private int zapomnitskorostY = 0;
 
 
     private int boardWidth;
@@ -138,23 +136,25 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
         }
         // уменьшение или возрастание скорости мячика
         if (e.getKeyCode() == KeyEvent.VK_UP) {
-            ball.setVelY(ball.getVelY() / Math.abs(ball.getVelY()) * (Math.abs(ball.getVelY()) + 1));
-            ball.setVelX(ball.getVelX() / Math.abs(ball.getVelX()) * (Math.abs(ball.getVelX()) + 1));
+            if (ball.getVelY()!=0 && ball.getVelX()!=0) {
+                ball.setVelY(ball.getVelY() / Math.abs(ball.getVelY()) * (Math.abs(ball.getVelY()) + 1));
+                ball.setVelX(ball.getVelX() / Math.abs(ball.getVelX()) * (Math.abs(ball.getVelX()) + 1));
+            }
         } else if (e.getKeyCode() == KeyEvent.VK_DOWN && Math.abs(ball.getVelY()) > 1) {
-            ball.setVelY(ball.getVelY() / Math.abs(ball.getVelY()) * (Math.abs(ball.getVelY()) - 1));
-            ball.setVelX(ball.getVelX() / Math.abs(ball.getVelX()) * (Math.abs(ball.getVelX()) - 1));
+            if (ball.getVelY()!=0 && ball.getVelX()!=0) {
+                ball.setVelY(ball.getVelY() / Math.abs(ball.getVelY()) * (Math.abs(ball.getVelY()) - 1));
+                ball.setVelX(ball.getVelX() / Math.abs(ball.getVelX()) * (Math.abs(ball.getVelX()) - 1));
+            }
 
         }
        if(e.getKeyCode()==KeyEvent.VK_SPACE){
            if(ball.getVelY()!=0){
-               zapomnitskorostX = ball.getVelX();
-               zapomnitskorostY = ball.getVelY();
                ball.setVelX(0);
                ball.setVelY(0);
            }
            else{
-               ball.setVelX(zapomnitskorostX);
-               ball.setVelY(zapomnitskorostY);
+               ball.setVelX(ball.getZapomnitskorostX());
+               ball.setVelY(ball.getZapomnitskorostY());
            }
         }
 

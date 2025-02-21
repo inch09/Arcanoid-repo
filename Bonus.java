@@ -99,4 +99,5 @@ public class Bonus {
     public BonusType getBonusType() {
         return bonusType;
     }
+
 }
