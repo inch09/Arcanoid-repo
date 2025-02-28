@@ -35,7 +35,7 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
         setFocusable(true);
 
 
-        gameStart = new Timer(10, this);
+        gameStart = new Timer(1, this);
         gameStart.start();
 
 
@@ -53,7 +53,7 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
         g.setColor(Color.black);
         g.drawString("Количество жизней: "+countLife,10,20);
         g.setColor(Color.black);
-        g.drawString("Количество остановок: "+countStops,10,30);
+        g.drawString("Количество оставшихся остановок: "+countStops,10,30);
         g.setColor(Color.black);
         g.drawString("Скорость: "+Math.abs(ball.getVelX()),10,40);
         g.setColor(Color.black);

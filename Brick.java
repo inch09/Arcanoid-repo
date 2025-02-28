@@ -35,8 +35,8 @@ public class Brick {
 
     public void replace() {
         Random random = new Random();
-        X = random.nextInt(600);
-        Y = random.nextInt(400);
+        X = random.nextInt(100,600);
+        Y = random.nextInt(60,400);
     }
 
     public void setWidth(int width) {
