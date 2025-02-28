@@ -37,19 +37,25 @@ public class Bonus {
         Random random = new Random();
         X = random.nextInt(100, 400);
         Y = random.nextInt(100, 400);
-        int c = random.nextInt(1, 12);
-        if (c <= 2) {
-            color = new Color(1, 1, 1);
-            bonusType = BonusType.PLUSSCORE;
-        } else if (c <= 4) {
-            color = Color.GREEN;
-            bonusType = BonusType.PLUSLIFE;
-        } else if (c <= 6) {
-            color = Color.BLUE;
-            bonusType = BonusType.PLUSWIDTHPLATFORM;
-        } else if (c <= 8) {
-            color = new Color(245, 87, 66);
-            bonusType = BonusType.MINUSLIFE;
+        int t = random.nextInt(2);
+        if(t==1) {
+            int c = random.nextInt(10);
+            if (c <= 2) {
+                color = new Color(1, 1, 1);
+                bonusType = BonusType.PLUSSCORE;
+            } else if (c <= 4) {
+                color = Color.GREEN;
+                bonusType = BonusType.PLUSLIFE;
+            } else if (c <= 6) {
+                color = Color.BLUE;
+                bonusType = BonusType.PLUSWIDTHPLATFORM;
+            } else if (c <= 8) {
+                color = new Color(245, 87, 66);
+                bonusType = BonusType.MINUSLIFE;
+            } else if (c <= 10) {
+                color = new Color(80, 190, 30);
+                bonusType = BonusType.PLUSSTOP;
+            }
         }
         isThereNow = true;
     }

@@ -10,7 +10,9 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
     private int x = 0;
     private int score = 0;
     private int countLife = 1;
+    private int countStops = 3;
     private boolean gameOver;
+    private int countBrokenBricks = 0;
 
 
     private int boardWidth;
@@ -46,6 +48,18 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
     }
 
     public void draw(Graphics g) {
+        g.setColor(Color.black);
+        g.drawString("Счет: "+score,10,10);
+        g.setColor(Color.black);
+        g.drawString("Количество жизней: "+countLife,10,20);
+        g.setColor(Color.black);
+        g.drawString("Количество остановок: "+countStops,10,30);
+        g.setColor(Color.black);
+        g.drawString("Скорость: "+Math.abs(ball.getVelX()),10,40);
+        g.setColor(Color.black);
+        g.drawString("Количество сломанных кирпичиков: "+countBrokenBricks,10,50);
+
+
         // platform
         g.setColor(platform.getColor());
         g.fillRect(platform.getX(), platform.getY(), platform.getWidth(), platform.getHeight());
@@ -86,6 +100,9 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
             if (bonus.getBonusType()==BonusType.MINUSLIFE) {
                 countLife--;
             }
+            if(bonus.getBonusType()==BonusType.PLUSSCORE){
+                countStops++;
+            }
 
 
         }
@@ -118,6 +135,7 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
         if ((ball.getY() + ball.getDiameter() >= brick.getY() && ball.getY() <= brick.getY() + brick.getHeight()) && (ball.getX() + brick.getHeight() >= brick.getX() && ball.getX() <= brick.getX() + brick.getWidth())) {
             ball.smenanapravleniyaY();
             score++;
+            countBrokenBricks++;
             brick.replace();
             if (!bonus.isThereNow()) {
                 bonus.spawn();
@@ -148,9 +166,10 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
 
         }
        if(e.getKeyCode()==KeyEvent.VK_SPACE){
-           if(ball.getVelY()!=0){
+           if(ball.getVelY()!=0 && countStops>0){
                ball.setVelX(0);
                ball.setVelY(0);
+               countStops -= 1;
            }
            else{
                ball.setVelX(ball.getZapomnitskorostX());
