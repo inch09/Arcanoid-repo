@@ -154,7 +154,7 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
         }
         // уменьшение или возрастание скорости мячика
         if (e.getKeyCode() == KeyEvent.VK_UP) {
-            if (ball.getVelY()!=0 && ball.getVelX()!=0) {
+            if ((ball.getVelY()!=0) && (ball.getVelX()!=0) && (Math.abs(ball.getVelX())<12)) {
                 ball.setVelY(ball.getVelY() / Math.abs(ball.getVelY()) * (Math.abs(ball.getVelY()) + 1));
                 ball.setVelX(ball.getVelX() / Math.abs(ball.getVelX()) * (Math.abs(ball.getVelX()) + 1));
             }
