@@ -48,16 +48,16 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
     }
 
     public void draw(Graphics g) {
+        g.setFont(new Font("SanSerif", 23, 20));
         g.setColor(Color.black);
-        g.drawString("Счет: "+score,10,10);
+        g.drawString("Счет: "+score,10,20);
         g.setColor(Color.black);
-        g.drawString("Количество жизней: "+countLife,10,20);
+        g.drawString("Жизни: "+countLife,10,40);
         g.setColor(Color.black);
-        g.drawString("Количество оставшихся остановок: "+countStops,10,30);
+        g.drawString("Остановки: "+countStops,10,60);
         g.setColor(Color.black);
-        g.drawString("Скорость: "+Math.abs(ball.getVelX()),10,40);
+        g.drawString("Скорость: "+Math.abs(ball.getVelX()),10,80);
         g.setColor(Color.black);
-        g.drawString("Количество сломанных кирпичиков: "+countBrokenBricks,10,50);
 
 
         // platform
