@@ -47,7 +47,7 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
         draw(g);
     }
 
-    public void draw(Graphics g) {
+    public void paintCounters(Graphics g){
         g.setFont(new Font("SanSerif", 23, 20));
         g.setColor(Color.black);
         g.drawString("Счет: "+score,10,20);
@@ -58,8 +58,10 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
         g.setColor(Color.black);
         g.drawString("Скорость: "+Math.abs(ball.getVelX()),10,80);
         g.setColor(Color.black);
+    }
 
-
+    public void draw(Graphics g) {
+        paintCounters(g);
         // platform
         g.setColor(platform.getColor());
         g.fillRect(platform.getX(), platform.getY(), platform.getWidth(), platform.getHeight());
@@ -82,10 +84,7 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
 
     }
 
-    public void move() {
-        if (countLife <= 0) {
-            gameOver = true;
-        }
+    public void getBonus(){
         if ((ball.getX() >= (bonus.getX() - ball.getDiameter()) && ball.getX() <= (bonus.getX() + bonus.getDiameter())) && (ball.getY() >= (bonus.getY() - ball.getDiameter()) && ball.getY() <= (bonus.getY() + bonus.getDiameter())) && (bonus.isThereNow())) {
             bonus.setThereNow(false);
             if (bonus.getBonusType()==BonusType.PLUSSCORE) {
@@ -98,14 +97,23 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
                 platform.updateWidth(30);
             }
             if (bonus.getBonusType()==BonusType.MINUSLIFE) {
-                countLife--;
+                countStops--;
             }
             if(bonus.getBonusType()==BonusType.PLUSSCORE){
                 countStops++;
             }
-
-
         }
+    }
+
+    public void gameOver(){
+        if (countLife <= 0) {
+            gameOver = true;
+        }
+    }
+
+    public void move() {
+        gameOver();
+        getBonus();
         if (platform.getX() >= boardWidth - platform.getWidth()) {
             platform.setVelX(0);
             platform.setX(boardWidth - 1 - platform.getWidth());
@@ -145,13 +153,18 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
         ball.izmenitY(ball.getVelY());
     }
 
+    public void movePlatform(KeyEvent e){
+        int platformVelocity = 5;
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            platform.setVelX(-platformVelocity);
+        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+            platform.setVelX(platformVelocity);
+        }
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            platform.setVelX(-5);
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            platform.setVelX(5);
-        }
+        movePlatform(e);
         // уменьшение или возрастание скорости мячика
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             if ((ball.getVelY()!=0) && (ball.getVelX()!=0) && (Math.abs(ball.getVelX())<12)) {
@@ -175,9 +188,7 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
                ball.setVelX(ball.getZapomnitskorostX());
                ball.setVelY(ball.getZapomnitskorostY());
            }
-        }
-
-
+       }
     }
 
     @Override
