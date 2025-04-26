@@ -11,7 +11,9 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
     private int score = 0;
     private int countLife = 1;
     private int countStops = 3;
-    private boolean gameOver;
+    private boolean gameOver = true;
+    private final int maxBallVelocity = 7;
+    private final int minBallVelocity = 3;
     private int countBrokenBricks = 0;
 
 
@@ -142,7 +144,7 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
         }
         if ((ball.getY() + ball.getDiameter() >= brick.getY() && ball.getY() <= brick.getY() + brick.getHeight()) && (ball.getX() + brick.getHeight() >= brick.getX() && ball.getX() <= brick.getX() + brick.getWidth())) {
             ball.smenanapravleniyaY();
-            score++;
+            score+=Math.abs(ball.getVelX())/3;
             countBrokenBricks++;
             brick.replace();
             if (!bonus.isThereNow()) {
@@ -167,11 +169,11 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
         movePlatform(e);
         // уменьшение или возрастание скорости мячика
         if (e.getKeyCode() == KeyEvent.VK_UP) {
-            if ((ball.getVelY()!=0) && (ball.getVelX()!=0) && (Math.abs(ball.getVelX())<12)) {
+            if ((ball.getVelY()!=0) && (ball.getVelX()!=0) && (Math.abs(ball.getVelX())<maxBallVelocity)) {
                 ball.setVelY(ball.getVelY() / Math.abs(ball.getVelY()) * (Math.abs(ball.getVelY()) + 1));
                 ball.setVelX(ball.getVelX() / Math.abs(ball.getVelX()) * (Math.abs(ball.getVelX()) + 1));
             }
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN && Math.abs(ball.getVelY()) > 1) {
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN && Math.abs(ball.getVelY()) > minBallVelocity) {
             if (ball.getVelY()!=0 && ball.getVelX()!=0) {
                 ball.setVelY(ball.getVelY() / Math.abs(ball.getVelY()) * (Math.abs(ball.getVelY()) - 1));
                 ball.setVelX(ball.getVelX() / Math.abs(ball.getVelX()) * (Math.abs(ball.getVelX()) - 1));
