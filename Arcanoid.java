@@ -9,7 +9,7 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
 
     private int x = 0;
     private int score = 0;
-    private int countLife = 1;
+    private int countLife = 10;
     private int countStops = 3;
     private boolean gameOver;
     private final int maxBallVelocity = 7;
@@ -112,10 +112,7 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
             gameOver = true;
         }
     }
-
-    public void move() {
-        gameOver();
-        getBonus();
+    public void isplatforminWall(){
         if (platform.getX() >= boardWidth - platform.getWidth()) {
             platform.setVelX(0);
             platform.setX(boardWidth - 1 - platform.getWidth());
@@ -124,6 +121,8 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
             platform.setX(1);
         }
         platform.izmenitX(platform.getVelX());
+    }
+    public void isballinWall(){
         if ((ball.getX() >= boardWidth - ball.getDiameter()) || ball.getX() <= 0) {
             ball.smenanapravleniyaX();
         }
@@ -139,9 +138,13 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
                 System.out.println("Score: " + score);
             }
         }
+    }
+    public void isballinPlatform(){
         if ((ball.getY() + ball.getDiameter() >= platform.getY() && ball.getY() <= platform.getY() + platform.getHeight()) && (ball.getX() + platform.getHeight() >= platform.getX() && ball.getX() <= platform.getX() + platform.getWidth()) && ball.getVelY() > 0) {
             ball.smenanapravleniyaY();
         }
+    }
+    public void isballinBrick(){
         if ((ball.getY() + ball.getDiameter() >= brick.getY() && ball.getY() <= brick.getY() + brick.getHeight()) && (ball.getX() + brick.getHeight() >= brick.getX() && ball.getX() <= brick.getX() + brick.getWidth())) {
             ball.smenanapravleniyaY();
             score+=Math.abs(ball.getVelX())/3;
@@ -151,8 +154,20 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
                 bonus.spawn();
             }
         }
+    }
+    public void changeVelBall(){
         ball.izmenitX(ball.getVelX());
         ball.izmenitY(ball.getVelY());
+    }
+
+    public void move() {
+        gameOver();
+        getBonus();
+        isplatforminWall();
+        isballinWall();
+        isballinPlatform();
+        isballinBrick();
+        changeVelBall();
     }
 
     public void movePlatform(KeyEvent e){
@@ -163,10 +178,7 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
             platform.setVelX(platformVelocity);
         }
     }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        movePlatform(e);
+    public void upOrdownVelBall(KeyEvent e){
         // уменьшение или возрастание скорости мячика
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             if ((ball.getVelY()!=0) && (ball.getVelX()!=0) && (Math.abs(ball.getVelX())<maxBallVelocity)) {
@@ -174,28 +186,35 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
                 ball.setVelX(ball.getVelX() / Math.abs(ball.getVelX()) * (Math.abs(ball.getVelX()) + 1));
             }
         } else if (e.getKeyCode() == KeyEvent.VK_DOWN && Math.abs(ball.getVelY()) > minBallVelocity) {
-            if (ball.getVelY()!=0 && ball.getVelX()!=0) {
+            if (ball.getVelY() != 0 && ball.getVelX() != 0) {
                 ball.setVelY(ball.getVelY() / Math.abs(ball.getVelY()) * (Math.abs(ball.getVelY()) - 1));
                 ball.setVelX(ball.getVelX() / Math.abs(ball.getVelX()) * (Math.abs(ball.getVelX()) - 1));
             }
-
         }
-       if(e.getKeyCode()==KeyEvent.VK_SPACE){
-           if(ball.getVelY()!=0 && countStops>0){
-               ball.setVelX(0);
-               ball.setVelY(0);
-               countStops -= 1;
-           }
-           else{
-               ball.setVelX(ball.getZapomnitskorostX());
-               ball.setVelY(ball.getZapomnitskorostY());
-           }
-       }
+
+    }
+    public void isStop(KeyEvent e){
+        if(e.getKeyCode()==KeyEvent.VK_SPACE){
+            if(ball.getVelY()!=0 && countStops>0){
+                ball.setVelX(0);
+                ball.setVelY(0);
+                countStops -= 1;
+            }
+            else{
+                ball.setVelX(ball.getZapomnitskorostX());
+                ball.setVelY(ball.getZapomnitskorostY());
+            }
+        }
+
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        move();
+    public void keyPressed(KeyEvent e) {
+        movePlatform(e);
+        upOrdownVelBall(e);
+        isStop(e);
+    }
+    public void isThereNowBonus(){
         if (bonus.isThereNow()) {
             if (x == bonus.getTimeLife()) {
                 bonus.setThereNow(false);
@@ -203,8 +222,13 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
             }
             x += 1;
         }
-        repaint();
+    }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        move();
+        isThereNowBonus();
+        repaint();
         if (gameOver) {
             gameStart.stop();
         }
@@ -222,19 +246,5 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
 
     }
 
-    public int getBoardHeight() {
-        return boardHeight;
-    }
 
-    public int getBoardWidth() {
-        return boardWidth;
-    }
-
-    public void setBoardHeight(int boardHeight) {
-        this.boardHeight = boardHeight;
-    }
-
-    public void setBoardWidth(int boardWidth) {
-        this.boardWidth = boardWidth;
-    }
 }
