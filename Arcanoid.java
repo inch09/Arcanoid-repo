@@ -11,7 +11,7 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
     private int score = 0;
     private int countLife = 1;
     private int countStops = 3;
-    private boolean gameOver = true;
+    private boolean gameOver;
     private final int maxBallVelocity = 7;
     private final int minBallVelocity = 3;
     private int countBrokenBricks = 0;
