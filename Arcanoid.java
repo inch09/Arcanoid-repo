@@ -11,17 +11,20 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
     private int score = 0;
     private int countLife = 10;
     private int countStops = 3;
-    private boolean gameOver;
+    boolean gameOver;
     private final int maxBallVelocity = 7;
     private final int minBallVelocity = 3;
+    private final int  startVelocity = 5;
     private int countBrokenBricks = 0;
+    private int bricksToBoss = 10;
+    private boolean firstStart = true;
 
 
     private int boardWidth;
     private int boardHeight;
 
     Platform platform = new Platform(150, 20, 300, 700, 0);
-    Ball ball = new Ball(100, 100, 5, 5, 20);
+    Ball ball = new Ball(400, 100, 0, 0, 20);
     Brick brick = new Brick(100, 10);
     Bonus bonus = new Bonus();
 
@@ -194,7 +197,12 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
 
     }
     public void isStop(KeyEvent e){
-        if(e.getKeyCode()==KeyEvent.VK_SPACE){
+       if(e.getKeyCode() == KeyEvent.VK_SPACE && firstStart == true){
+           ball.setVelX(startVelocity);
+           ball.setVelY(startVelocity);
+           firstStart = false;
+       }
+        else if(e.getKeyCode()==KeyEvent.VK_SPACE){
             if(ball.getVelY()!=0 && countStops>0){
                 ball.setVelX(0);
                 ball.setVelY(0);
