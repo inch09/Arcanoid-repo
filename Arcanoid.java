@@ -10,14 +10,15 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
     private int x = 0;
     private int score = 0;
     private int countLife = 10;
-    private int countStops = 3;
+    private int countStops = 30;
     boolean gameOver;
     private final int maxBallVelocity = 7;
     private final int minBallVelocity = 3;
     private final int  startVelocity = 5;
-    private int countBrokenBricks = 0;
-    private int bricksToBoss = 10;
     private boolean firstStart = true;
+    private boolean isStop = false;
+    private int vectorLength = 100;
+    private final double angularVelocity = 0.05;
 
 
     private int boardWidth;
@@ -27,6 +28,7 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
     Ball ball = new Ball(400, 100, 0, 0, 20);
     Brick brick = new Brick(100, 10);
     Bonus bonus = new Bonus();
+    Vector vector  = new Vector(0,0,0,0,0);
 
 
     Timer gameStart;
@@ -76,6 +78,10 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
         //ball
         g.setColor(Color.black);
         g.fillOval(ball.getX(), ball.getY(), ball.getDiameter(), ball.getDiameter());
+        if(isStop){
+            g.setColor(Color.red);
+            g.drawLine(vector.getxCenter(),vector.getyCenter(),(int)vector.getX(),(int) vector.getY());
+        }
         if (bonus.isThereNow()) {
             g.setColor(bonus.getColor());
             g.fillOval(bonus.getX(), bonus.getY(), bonus.getDiameter(), bonus.getDiameter());
@@ -151,7 +157,6 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
         if ((ball.getY() + ball.getDiameter() >= brick.getY() && ball.getY() <= brick.getY() + brick.getHeight()) && (ball.getX() + brick.getHeight() >= brick.getX() && ball.getX() <= brick.getX() + brick.getWidth())) {
             ball.smenanapravleniyaY();
             score+=Math.abs(ball.getVelX())/3;
-            countBrokenBricks++;
             brick.replace();
             if (!bonus.isThereNow()) {
                 bonus.spawn();
@@ -164,6 +169,10 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
     }
 
     public void move() {
+        if (isStop){
+            vector.setX(vector.getX()+vector.rotateX());
+            vector.setY(vector.getY()+vector.rotateY());
+        }
         gameOver();
         getBonus();
         isplatforminWall();
@@ -201,16 +210,21 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
            ball.setVelX(startVelocity);
            ball.setVelY(startVelocity);
            firstStart = false;
+           changeVector();
+
        }
         else if(e.getKeyCode()==KeyEvent.VK_SPACE){
             if(ball.getVelY()!=0 && countStops>0){
                 ball.setVelX(0);
                 ball.setVelY(0);
                 countStops -= 1;
+                isStop = true;
+                changeVector();
             }
             else{
                 ball.setVelX(ball.getZapomnitskorostX());
                 ball.setVelY(ball.getZapomnitskorostY());
+                isStop = false;
             }
         }
 
@@ -251,6 +265,14 @@ public class Arcanoid extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+
+    }
+    public void changeVector(){
+            vector.setxCenter(ball.getX()+ ball.getDiameter()/2);
+            vector.setyCenter(ball.getY()+ball.getDiameter()/2);
+            vector.setX(ball.getX());
+            vector.setY(vector.getyCenter()-vectorLength);
+            vector.setAngularVelocity(angularVelocity);
 
     }
 
