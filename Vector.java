@@ -4,10 +4,11 @@ public class Vector {
     private double x;
     private double y;
     private double angularVelocity;
-    Vector(int xCenter,int yCenter,int length,int x0,int angularVelocity){
+    Vector(int xCenter,int yCenter,int X,int Y,double angularVelocity){
         this.xCenter = xCenter;
         this.yCenter = yCenter;
-        this.x = x0;
+        this.x = X;
+        this.y = Y;
         this.angularVelocity = angularVelocity;
 
 
